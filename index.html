@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punto Dorado — Tequeños Congelados · Origen Venezolano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0a0a0a;
+    --negro-medio: #111111;
+    --negro-suave: #1a1a1a;
+    --dorado: #c9a84c;
+    --dorado-claro: #e2c47a;
+    --dorado-oscuro: #9a7a30;
+    --crema: #f5eed8;
+    --crema-suave: #fdf8ee;
+    --blanco: #ffffff;
+    --gris: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'Tenor Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    transition: background 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--dorado);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--crema);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s, color 0.3s;
+  }
+
+  .nav-links a:hover { opacity: 1; color: var(--dorado); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 80% 20%, rgba(201,168,76,0.04) 0%, transparent 50%);
+  }
+
+  .hero-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--dorado);
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+
+  .hero-ornament::before,
+  .hero-ornament::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--dorado));
+  }
+
+  .hero-ornament::after {
+    background: linear-gradient(to left, transparent, var(--dorado));
+  }
+
+  .hero-D {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(5rem, 15vw, 12rem);
+    font-weight: 300;
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    z-index: 0;
+    pointer-events: none;
+    animation: fadeIn 1.5s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .hero-pretitle {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    color: var(--dorado);
+    margin-bottom: 1rem;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: 0.05em;
+    color: var(--crema);
+    margin-bottom: 0.5rem;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.6s;
+    opacity: 0;
+  }
+
+  .hero-title span { color: var(--dorado); font-style: italic; }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--crema);
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+    margin-bottom: 3rem;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.8s;
+    opacity: 0;
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--dorado), transparent);
+    margin: 0 auto 3rem;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 1s;
+    opacity: 0;
+  }
+
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: transparent;
+    border: 1px solid var(--dorado);
+    color: var(--dorado);
+    text-decoration: none;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 1.1s;
+    opacity: 0;
+  }
+
+  .btn-whatsapp::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--dorado);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+
+  .btn-whatsapp:hover::before { transform: translateX(0); }
+  .btn-whatsapp:hover { color: var(--negro); }
+
+  .btn-whatsapp svg { width: 16px; height: 16px; }
+
+  /* ─── STRIP ─── */
+  .strip {
+    border-top: 1px solid rgba(201,168,76,0.2);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 1rem 0;
+    overflow: hidden;
+    background: rgba(201,168,76,0.03);
+  }
+
+  .strip-inner {
+    display: flex;
+    gap: 4rem;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  }
+
+  .strip-item {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--dorado);
+    opacity: 0.7;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .strip-item::before {
+    content: '◆';
+    font-size: 0.4rem;
+  }
+
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── PRODUCTOS ─── */
+  .section { padding: 8rem 4rem; }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 6rem;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--dorado);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .section-label::before, .section-label::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--dorado);
+    opacity: 0.5;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--crema);
+    line-height: 1.1;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--dorado);
+  }
+
+  .productos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .producto-card {
+    position: relative;
+    background: var(--negro-suave);
+    padding: 3.5rem 3rem;
+    border: 1px solid rgba(201,168,76,0.1);
+    transition: border-color 0.4s, background 0.4s;
+    overflow: hidden;
+  }
+
+  .producto-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(to right, transparent, var(--dorado), transparent);
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
+  }
+
+  .producto-card:hover::before { transform: scaleX(1); }
+  .producto-card:hover { border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.03); }
+
+  .producto-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem;
+    font-weight: 300;
+    color: rgba(201,168,76,0.08);
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .producto-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .producto-nombre {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--crema);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .producto-desc {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gris);
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .producto-precio {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--dorado);
+    line-height: 1;
+  }
+
+  .producto-precio span {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--gris);
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  /* ─── COMO PREPARAR ─── */
+  .preparacion {
+    background: var(--negro-suave);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .prep-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(201,168,76,0.1);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .prep-item {
+    background: var(--negro-suave);
+    padding: 3rem 2.5rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .prep-item:hover { background: rgba(201,168,76,0.04); }
+
+  .prep-icono {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .prep-metodo {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--dorado);
+    margin-bottom: 0.5rem;
+  }
+
+  .prep-temp {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--crema);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .prep-tiempo {
+    font-size: 0.7rem;
+    color: var(--gris);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── CONTACTO ─── */
+  .contacto {
+    text-align: center;
+    padding: 10rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contacto-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .contacto-content { position: relative; z-index: 1; }
+
+  .contacto-pretexto {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-style: italic;
+    color: var(--gris);
+    margin-bottom: 1rem;
+  }
+
+  .contacto-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300;
+    color: var(--crema);
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+  }
+
+  .contacto-titulo em { color: var(--dorado); font-style: italic; }
+
+  .contacto-sub {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gris);
+    margin-bottom: 4rem;
+    text-transform: uppercase;
+  }
+
+  .btn-principal {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 3rem;
+    background: var(--dorado);
+    color: var(--negro);
+    text-decoration: none;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    font-weight: 400;
+  }
+
+  .btn-principal:hover {
+    background: var(--dorado-claro);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(201,168,76,0.2);
+  }
+
+  .btn-principal svg { width: 20px; height: 20px; }
+
+  .info-chips {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 4rem;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris);
+  }
+
+  .chip::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--dorado);
+    border-radius: 50%;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: var(--dorado);
+    text-transform: uppercase;
+  }
+
+  .footer-copy {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gris);
+    text-transform: uppercase;
+  }
+
+  .footer-origen {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--gris);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .section { padding: 5rem 1.5rem; }
+    .productos-grid { grid-template-columns: 1fr; }
+    .prep-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+    .contacto { padding: 6rem 1.5rem; }
+    .info-chips { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Punto Dorado</a>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#preparacion">Preparación</a></li>
+    <li><a href="#contacto">Pedir ahora</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-D">D</div>
+  <div class="hero-content">
+    <div class="hero-ornament">Origen Venezolano</div>
+    <p class="hero-pretitle">Tequeños Congelados Artesanales</p>
+    <h1 class="hero-title">PUNTO<br><span>Dorado</span></h1>
+    <p class="hero-subtitle">El sabor que te acompaña</p>
+    <div class="hero-divider"></div>
+    <a href="https://wa.me/541168780760?text=Hola!%20Vi%20la%20página%20y%20quiero%20hacer%20un%20pedido%20de%20tequeños%20Dorado%20🧀" target="_blank" class="btn-whatsapp">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.852L.057 23.761a.5.5 0 0 0 .611.65l6.101-1.598A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.897 0-3.67-.516-5.188-1.415l-.372-.223-3.862 1.012 1.029-3.762-.244-.386A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Hacer mi pedido
+    </a>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item">Tequeños de queso venezolano</span>
+    <span class="strip-item">Congelados · Listos para freír</span>
+    <span class="strip-item">12 unidades por paquete</span>
+    <span class="strip-item">Envío y retiro disponible</span>
+    <span class="strip-item">Hecho en Argentina · Sabor venezolano</span>
+    <span class="strip-item">Sin descongelar · 3 a 4 minutos</span>
+    <span class="strip-item">Tequeños de queso venezolano</span>
+    <span class="strip-item">Congelados · Listos para freír</span>
+    <span class="strip-item">12 unidades por paquete</span>
+    <span class="strip-item">Envío y retiro disponible</span>
+    <span class="strip-item">Hecho en Argentina · Sabor venezolano</span>
+    <span class="strip-item">Sin descongelar · 3 a 4 minutos</span>
+  </div>
+</div>
+
+<!-- PRODUCTOS -->
+<section class="section" id="productos">
+  <div class="section-header reveal">
+    <div class="section-label">Nuestros productos</div>
+    <h2 class="section-title">Tequeños<br><em>artesanales</em></h2>
+  </div>
+
+  <div class="productos-grid">
+    <div class="producto-card reveal">
+      <div class="producto-num">01</div>
+      <div class="producto-icon">🧀</div>
+      <h3 class="producto-nombre">Tequeños<br>de Queso</h3>
+      <p class="producto-desc">Masa artesanal envuelta en auténtico queso venezolano. Crocantes por fuera, derretidos por dentro.</p>
+      <div class="producto-precio">
+        $7.500
+        <span>Paquete × 12 unidades</span>
+      </div>
+    </div>
+
+    <div class="producto-card reveal" style="transition-delay: 0.15s">
+      <div class="producto-num">02</div>
+      <div class="producto-icon">🥩</div>
+      <h3 class="producto-nombre">Tequeños de<br>Jamón y Queso</h3>
+      <p class="producto-desc">La combinación perfecta de jamón y queso venezolano envueltos en masa artesanal. Sabor intenso en cada bocado.</p>
+      <div class="producto-precio">
+        $10.000
+        <span>Paquete × 12 unidades</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREPARACIÓN -->
+<section class="section preparacion" id="preparacion">
+  <div class="section-header reveal">
+    <div class="section-label">Fácil preparación</div>
+    <h2 class="section-title">Listos en<br><em>minutos</em></h2>
+  </div>
+
+  <div class="prep-grid">
+    <div class="prep-item reveal">
+      <span class="prep-icono">🍳</span>
+      <div class="prep-metodo">Freír</div>
+      <div class="prep-temp">170°C</div>
+      <div class="prep-tiempo">3 a 4 minutos</div>
+    </div>
+    <div class="prep-item reveal" style="transition-delay: 0.1s">
+      <span class="prep-icono">🌬️</span>
+      <div class="prep-metodo">Air Fryer</div>
+      <div class="prep-temp">180°C</div>
+      <div class="prep-tiempo">10 a 12 minutos</div>
+    </div>
+    <div class="prep-item reveal" style="transition-delay: 0.2s">
+      <span class="prep-icono">🔥</span>
+      <div class="prep-metodo">Horno</div>
+      <div class="prep-temp">200°C</div>
+      <div class="prep-tiempo">15 a 18 minutos</div>
+    </div>
+  </div>
+
+  <p style="text-align:center; margin-top: 3rem; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gris); font-style: italic;" class="reveal">
+    ✦ No es necesario descongelar antes de cocinar ✦
+  </p>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="contacto-bg"></div>
+  <div class="contacto-content">
+    <p class="contacto-pretexto reveal">¿Listo para el próximo encuentro?</p>
+    <h2 class="contacto-titulo reveal">Pedí tus<br><em>tequeños</em><br>ahora</h2>
+    <p class="contacto-sub reveal">Respondemos rápido · Envío o retiro a coordinar</p>
+    <a href="https://wa.me/541168780760?text=Hola!%20Vi%20la%20página%20y%20quiero%20hacer%20un%20pedido%20de%20tequeños%20Dorado%20🧀" target="_blank" class="btn-principal reveal">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.852L.057 23.761a.5.5 0 0 0 .611.65l6.101-1.598A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.897 0-3.67-.516-5.188-1.415l-.372-.223-3.862 1.012 1.029-3.762-.244-.386A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Escribinos por WhatsApp
+    </a>
+
+    <div class="info-chips reveal">
+      <span class="chip">Efectivo</span>
+      <span class="chip">Transferencia</span>
+      <span class="chip">Mercado Pago</span>
+      <span class="chip">Envío a domicilio</span>
+      <span class="chip">Retiro disponible</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Punto Dorado</div>
+  <div class="footer-copy">© 2026 Dorado · Todos los derechos reservados</div>
+  <div class="footer-origen">origen venezolano</div>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
