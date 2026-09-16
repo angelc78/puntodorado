@@ -436,6 +436,19 @@
   background: var(--dorado);
   color: var(--negro);
 }
+  .producto-card.agotado {
+  opacity: 0.55;
+}
+
+.producto-cta.agotado {
+  border-color: var(--gris);
+  color: var(--gris);
+}
+
+.producto-cta.agotado:hover {
+  background: var(--gris);
+  color: var(--negro);
+}
 
   /* ─── COMO PREPARAR ─── */
   .preparacion {
@@ -736,7 +749,7 @@
   </div>
 
   <div class="productos-grid">
-    <div class="producto-card reveal">
+    <div class="producto-card reveal" data-stock-id="tequenos-queso">
   <div class="producto-num">01</div>
   <div class="producto-icon">🧀</div>
   <h3 class="producto-nombre">Tequeños<br>de Queso</h3>
@@ -748,8 +761,8 @@
   <a href="https://wa.me/541168780760?text=Hola!%20Quiero%20pedir%20el%20paquete%20de%20Tequeños%20de%20Queso%20🧀" class="producto-cta" target="_blank">Pedir por WhatsApp</a>
 </div>
 
-<div class="producto-card reveal" style="transition-delay: 0.15s">
-  <div class="producto-num">02</div>
+<div class="producto-card reveal" data-stock-id="tequenos-jamon-queso" style="transition-delay: 0.15s">
+    <div class="producto-num">02</div>
   <div class="producto-icon">🥩</div>
   <h3 class="producto-nombre">Tequeños de<br>Jamón y Queso</h3>
   <p class="producto-desc">La combinación perfecta de jamón y queso venezolano envueltos en masa artesanal. Sabor intenso en cada bocado.</p>
