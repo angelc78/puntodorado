@@ -627,8 +627,7 @@
   }
 </style>
 </head>
-  <script src="prices.js"></script>
-<body>
+  <body>
 
 <!-- NAV -->
 <nav id="nav">
@@ -717,7 +716,7 @@
       <h3 class="producto-nombre">Tequeños<br>de Queso</h3>
       <p class="producto-desc">Masa artesanal envuelta en auténtico queso venezolano. Crocantes por fuera, derretidos por dentro.</p>
       <div class="producto-precio">
-        <script src="precio.js"></script>
+        <span data-price-id="tequenos-queso">$8000</span>
         <span>Paquete × 12 unidades</span>
       </div>
     </div>
@@ -728,7 +727,7 @@
       <h3 class="producto-nombre">Tequeños de<br>Jamón y Queso</h3>
       <p class="producto-desc">La combinación perfecta de jamón y queso venezolano envueltos en masa artesanal. Sabor intenso en cada bocado.</p>
       <div class="producto-precio">
-        <script src="precio.js"></script>
+        <span data-price-id="tequenos-jamon-queso">$10000</span>
         <span>Paquete × 12 unidades</span>
       </div>
     </div>
@@ -816,5 +815,6 @@
 
   reveals.forEach(el => observer.observe(el));
 </script>
+<script src="precio.js"></script>
 </body>
 </html>
