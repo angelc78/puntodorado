@@ -6,12 +6,28 @@ async function actualizarPrecios() {
     const url = `${SHEET_CSV_URL}${SHEET_CSV_URL.includes('?') ? '&' : '?'}t=${Date.now()}`;
     const respuesta = await fetch(url);
     const textoCSV = await respuesta.text();
-    const precios = parsearCSV(textoCSV);
+    const productos = parsearCSV(textoCSV);
 
+    // Actualiza los precios
     document.querySelectorAll('[data-price-id]').forEach((elemento) => {
       const id = elemento.dataset.priceId;
-      if (precios[id] !== undefined) {
-        elemento.textContent = `$${precios[id].toLocaleString('es-AR')}`;
+      if (productos[id]?.precio !== undefined) {
+        elemento.textContent = `$${productos[id].precio.toLocaleString('es-AR')}`;
+      }
+    });
+
+    // Marca como agotado el producto que tenga stock en 0
+    document.querySelectorAll('.producto-card[data-stock-id]').forEach((card) => {
+      const id = card.dataset.stockId;
+      const stock = productos[id]?.stock;
+      if (stock !== undefined && stock <= 0) {
+        card.classList.add('agotado');
+        const boton = card.querySelector('.producto-cta');
+        if (boton) {
+          boton.classList.add('agotado');
+          boton.textContent = 'Agotado · Pedí tu reserva';
+          boton.href = boton.href.replace(/pedir/i, 'reservar');
+        }
       }
     });
   } catch (error) {
@@ -20,7 +36,6 @@ async function actualizarPrecios() {
 }
 
 // Separa una línea de CSV respetando los campos entre comillas
-// (necesario porque Google exporta los precios como "$8,500", con coma adentro)
 function parsearLineaCSV(linea) {
   const columnas = [];
   let actual = '';
@@ -41,23 +56,29 @@ function parsearLineaCSV(linea) {
   return columnas;
 }
 
+// Espera columnas: id, nombre, precio, stock (en ese orden)
 function parsearCSV(csv) {
   const filas = csv.trim().split('\n');
-  const precios = {};
+  const productos = {};
 
   for (let i = 1; i < filas.length; i++) {
     const columnas = parsearLineaCSV(filas[i]);
     const id = columnas[0]?.trim();
+    if (!id) continue;
+
     const precioTexto = columnas[2]?.trim();
-    if (id && precioTexto) {
-      const numero = Number(precioTexto.replace(/[^0-9]/g, ''));
-      if (!isNaN(numero)) {
-        precios[id] = numero;
-      }
-    }
+    const stockTexto = columnas[3]?.trim();
+
+    const precio = precioTexto ? Number(precioTexto.replace(/[^0-9]/g, '')) : NaN;
+    const stock = stockTexto !== undefined && stockTexto !== '' ? Number(stockTexto.replace(/[^0-9]/g, '')) : NaN;
+
+    productos[id] = {
+      precio: !isNaN(precio) ? precio : undefined,
+      stock: !isNaN(stock) ? stock : undefined,
+    };
   }
 
-  return precios;
+  return productos;
 }
 
 document.addEventListener('DOMContentLoaded', actualizarPrecios);
