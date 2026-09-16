@@ -417,6 +417,25 @@
   display: inline;
   margin-top: 0;
 }
+  .producto-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.25rem;
+  border: 1px solid var(--dorado);
+  color: var(--dorado);
+  text-decoration: none;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.producto-cta:hover {
+  background: var(--dorado);
+  color: var(--negro);
+}
 
   /* ─── COMO PREPARAR ─── */
   .preparacion {
@@ -718,27 +737,30 @@
 
   <div class="productos-grid">
     <div class="producto-card reveal">
-      <div class="producto-num">01</div>
-      <div class="producto-icon">🧀</div>
-      <h3 class="producto-nombre">Tequeños<br>de Queso</h3>
-      <p class="producto-desc">Masa artesanal envuelta en auténtico queso venezolano. Crocantes por fuera, derretidos por dentro.</p>
-      <div class="producto-precio">
-        <span data-price-id="tequenos-queso">$8000</span>
-        <span>Paquete × 12 unidades</span>
-      </div>
-    </div>
-
-    <div class="producto-card reveal" style="transition-delay: 0.15s">
-      <div class="producto-num">02</div>
-      <div class="producto-icon">🥩</div>
-      <h3 class="producto-nombre">Tequeños de<br>Jamón y Queso</h3>
-      <p class="producto-desc">La combinación perfecta de jamón y queso venezolano envueltos en masa artesanal. Sabor intenso en cada bocado.</p>
-      <div class="producto-precio">
-        <span data-price-id="tequenos-jamon-queso">$10000</span>
-        <span>Paquete × 12 unidades</span>
-      </div>
-    </div>
+  <div class="producto-num">01</div>
+  <div class="producto-icon">🧀</div>
+  <h3 class="producto-nombre">Tequeños<br>de Queso</h3>
+  <p class="producto-desc">Masa artesanal envuelta en auténtico queso venezolano. Crocantes por fuera, derretidos por dentro.</p>
+  <div class="producto-precio">
+    <span data-price-id="tequenos-queso">$8000</span>
+    <span>Paquete × 12 unidades</span>
   </div>
+  <a href="https://wa.me/541168780760?text=Hola!%20Quiero%20pedir%20el%20paquete%20de%20Tequeños%20de%20Queso%20🧀" class="producto-cta" target="_blank">Pedir por WhatsApp</a>
+</div>
+
+<div class="producto-card reveal" style="transition-delay: 0.15s">
+  <div class="producto-num">02</div>
+  <div class="producto-icon">🥩</div>
+  <h3 class="producto-nombre">Tequeños de<br>Jamón y Queso</h3>
+  <p class="producto-desc">La combinación perfecta de jamón y queso venezolano envueltos en masa artesanal. Sabor intenso en cada bocado.</p>
+  <div class="producto-precio">
+    <span data-price-id="tequenos-jamon-queso">$10000</span>
+    <span>Paquete × 12 unidades</span>
+  </div>
+  <a href="https://wa.me/541168780760?text=Hola!%20Quiero%20pedir%20el%20paquete%20de%20Tequeños%20de%20Jamón%20y%20Queso%20🧀" class="producto-cta" target="_blank">Pedir por WhatsApp</a>
+</div>
+  </div>
+</div>
 </section>
 
 <!-- PREPARACIÓN -->
