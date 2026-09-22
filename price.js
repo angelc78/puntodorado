@@ -1,14 +1,16 @@
-// precio.js
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOb8tl861tZb5oC5Yd6ssclDEBdxYASBGzmExv4DaKISeun9avcVZUerICvF5A09xiC92SNNOijfim/pub?output=csv";
+// price.js
+const SHEET_CSV_URL = "https://google.com";
 
 async function actualizarPrecios() {
   try {
     const url = `${SHEET_CSV_URL}${SHEET_CSV_URL.includes('?') ? '&' : '?'}t=${Date.now()}`;
     const respuesta = await fetch(url);
+    if (!respuesta.ok) throw new Error(`HTTP Error: ${respuesta.status}`);
+    
     const textoCSV = await respuesta.text();
     const productos = parsearCSV(textoCSV);
 
-    // Actualiza los precios
+    // 1. Renderizar Precios Dinámicos
     document.querySelectorAll('[data-price-id]').forEach((elemento) => {
       const id = elemento.dataset.priceId;
       if (productos[id]?.precio !== undefined) {
@@ -16,16 +18,17 @@ async function actualizarPrecios() {
       }
     });
 
-    // Marca como agotado el producto que tenga stock en 0
+    // 2. Evaluar reglas de Stock Cero
     document.querySelectorAll('.producto-card[data-stock-id]').forEach((card) => {
       const id = card.dataset.stockId;
       const stock = productos[id]?.stock;
+      
       if (stock !== undefined && stock <= 0) {
         card.classList.add('agotado');
         const boton = card.querySelector('.producto-cta');
         if (boton) {
           boton.classList.add('agotado');
-          boton.textContent = 'Agotado · Pedí tu reserva';
+          boton.textContent = 'Agotado · Reservar';
           boton.href = boton.href.replace(/pedir/i, 'reservar');
         }
       }
@@ -35,7 +38,6 @@ async function actualizarPrecios() {
   }
 }
 
-// Separa una línea de CSV respetando los campos entre comillas
 function parsearLineaCSV(linea) {
   const columnas = [];
   let actual = '';
@@ -56,9 +58,9 @@ function parsearLineaCSV(linea) {
   return columnas;
 }
 
-// Espera columnas: id, nombre, precio, stock (en ese orden)
 function parsearCSV(csv) {
-  const filas = csv.trim().split('\n');
+  // Limpia saltos de línea (\r\n) que rompen la lectura de datos
+  const filas = csv.trim().split(/\r?\n/);
   const productos = {};
 
   for (let i = 1; i < filas.length; i++) {
@@ -69,8 +71,19 @@ function parsearCSV(csv) {
     const precioTexto = columnas[2]?.trim();
     const stockTexto = columnas[3]?.trim();
 
-    const precio = precioTexto ? Number(precioTexto.replace(/[^0-9]/g, '')) : NaN;
-    const stock = stockTexto !== undefined && stockTexto !== '' ? Number(stockTexto.replace(/[^0-9]/g, '')) : NaN;
+    const limpiarNumero = (texto) => {
+      if (!texto) return NaN;
+      let procesado = texto.replace(/[^0-9.,-]/g, '');
+      if (procesado.includes(',') && procesado.includes('.')) {
+        procesado = procesado.replace(/\./g, '').replace(',', '.');
+      } else if (procesado.includes(',')) {
+        procesado = procesado.replace(',', '.');
+      }
+      return parseFloat(procesado);
+    };
+
+    const precio = limpiarNumero(precioTexto);
+    const stock = limpiarNumero(stockTexto);
 
     productos[id] = {
       precio: !isNaN(precio) ? precio : undefined,
