@@ -5,15 +5,25 @@ const NUMERO_WHATSAPP = "541168780760";
 async function cargarCatalogo() {
   const grilla = document.getElementById('productos-grid');
   if (!grilla) return;
+
+  grilla.innerHTML = '<p class="catalogo-estado">Cargando productos...</p>';
+
   try {
     const url = `${SHEET_CSV_URL}${SHEET_CSV_URL.includes('?') ? '&' : '?'}t=${Date.now()}`;
     const respuesta = await fetch(url);
+    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
     const textoCSV = await respuesta.text();
     const productos = parsearCSV(textoCSV);
+    if (productos.length === 0) throw new Error('Catálogo vacío');
+
     grilla.innerHTML = '';
     productos.forEach((producto, index) => grilla.appendChild(crearCard(producto, index)));
   } catch (error) {
     console.error('No se pudo cargar el catálogo:', error);
+    grilla.innerHTML = `
+      <p class="catalogo-estado">No pudimos cargar el catálogo en este momento.<br>Escribinos por WhatsApp y te contamos qué tenemos disponible.</p>
+      <a href="https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent('Hola! Quiero saber qué tequeños tienen disponibles')}" class="producto-cta" target="_blank" style="margin: 0 auto;">Escribinos por WhatsApp</a>
+    `;
   }
 }
 
