@@ -1,164 +1,225 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Punto Dorado — Tequeños Congelados · Origen Venezolano</title>
-  
-  <!-- Optimización de Fuentes de Google -->
-  <link rel="preconnect" href="https://googleapis.com">
-  <link rel="preconnect" href="https://gstatic.com" crossorigin>
-  <link href="https://googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
-  
-  <!-- Enlace a tu archivo de diseño -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punto Dorado — Tequeños Congelados · Origen Venezolano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0a0a0a;
+    --negro-suave: #1a1a1a;
+    --dorado: #c9a84c;
+    --dorado-claro: #e2c47a;
+    --crema: #f5eed8;
+    --gris: #a8a8a8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'Tenor Sans', sans-serif;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(10,10,10,0.97); border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; letter-spacing: 0.35em; color: var(--dorado); text-transform: uppercase; text-decoration: none; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--crema); text-decoration: none; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
+  .nav-links a:hover { opacity: 1; color: var(--dorado); }
+
+  .hero-nuevo { display: flex; align-items: center; justify-content: space-between; padding: 140px 4rem 4rem; min-height: 80vh; gap: 4rem; }
+  .hero-texto { flex: 1; }
+  .hero-imagen { flex: 1; text-align: right; }
+  .hero-imagen img { width: 100%; max-width: 500px; border-radius: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .hero-ornament { font-family: 'Cormorant Garamond', serif; font-size: 0.65rem; letter-spacing: 0.5em; color: var(--dorado); text-transform: uppercase; opacity: 0.8; margin-bottom: 1.5rem; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 300; line-height: 0.9; letter-spacing: 0.05em; color: var(--crema); margin-bottom: 1rem; }
+  .hero-title span { color: var(--dorado); font-style: italic; }
+  .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: clamp(0.9rem, 2vw, 1.2rem); font-weight: 300; font-style: italic; color: var(--crema); opacity: 0.7; margin-bottom: 2rem; }
+  .btn-principal {
+    display: inline-flex; align-items: center; gap: 1rem;
+    padding: 1.1rem 2.5rem; background: var(--dorado); color: var(--negro);
+    text-decoration: none; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    transition: all 0.3s ease; font-weight: 400;
+  }
+  .btn-principal:hover { background: var(--dorado-claro); transform: translateY(-2px); box-shadow: 0 20px 40px rgba(201,168,76,0.2); }
+  .btn-principal svg { width: 18px; height: 18px; }
+
+  .strip { border-top: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2); padding: 1rem 0; overflow: hidden; background: rgba(201,168,76,0.03); }
+  .strip-inner { display: flex; gap: 4rem; animation: scroll 20s linear infinite; width: max-content; }
+  .strip-item { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--dorado); opacity: 0.7; white-space: nowrap; display: flex; align-items: center; gap: 1rem; }
+  .strip-item::before { content: '◆'; font-size: 0.4rem; }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .section { padding: 8rem 4rem; }
+  .section-header { text-align: center; margin-bottom: 6rem; }
+  .section-label { font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--dorado); margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem; }
+  .section-label::before, .section-label::after { content: ''; width: 40px; height: 1px; background: var(--dorado); opacity: 0.5; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: var(--crema); line-height: 1.1; }
+  .section-title em { font-style: italic; color: var(--dorado); }
+
+  .productos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; max-width: 1000px; margin: 0 auto; }
+  .producto-card { position: relative; background: var(--negro-suave); padding: 3.5rem 3rem; border: 1px solid rgba(201,168,76,0.1); transition: border-color 0.4s, background 0.4s, opacity 0.4s, filter 0.4s; overflow: hidden; }
+  .producto-card:hover { border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.03); }
+  .producto-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: rgba(201,168,76,0.08); position: absolute; top: 1rem; right: 2rem; line-height: 1; pointer-events: none; }
+  .producto-icon { width: 40px; height: 40px; border: 1px solid rgba(201,168,76,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.2rem; }
+  .producto-nombre { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; color: var(--crema); margin-bottom: 0.5rem; line-height: 1.2; }
+  .producto-desc { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--gris); margin-bottom: 2rem; line-height: 1.8; }
+  .producto-precio { line-height: 1; margin-bottom: 0.5rem; }
+  .producto-precio .precio-valor { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--dorado); }
+  .producto-precio .precio-detalle { font-family: 'Tenor Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--gris); display: block; margin-top: 0.25rem; }
+
+  .producto-cta { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; padding: 0.6rem 1.25rem; border: 1px solid var(--dorado); color: var(--dorado); text-decoration: none; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; transition: all 0.3s ease; }
+  .producto-cta:hover { background: var(--dorado); color: var(--negro); }
+  .producto-card.agotado { opacity: 0.55; }
+  .producto-cta.agotado { border-color: var(--gris); color: var(--gris); }
+  .producto-cta.agotado:hover { background: var(--gris); color: var(--negro); }
+
+  .preparacion { background: var(--negro-suave); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .prep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(201,168,76,0.1); max-width: 900px; margin: 0 auto; }
+  .prep-item { background: var(--negro-suave); padding: 3rem 2.5rem; text-align: center; }
+  .prep-icono { font-size: 2rem; margin-bottom: 1.5rem; display: block; }
+  .prep-metodo { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--dorado); margin-bottom: 0.5rem; }
+  .prep-temp { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--crema); line-height: 1; margin-bottom: 0.25rem; }
+  .prep-tiempo { font-size: 0.7rem; color: var(--gris); letter-spacing: 0.1em; }
+
+  .contacto { text-align: center; padding: 10rem 4rem; position: relative; overflow: hidden; }
+  .contacto-content { position: relative; z-index: 1; }
+  .contacto-pretexto { font-family: 'Cormorant Garamond', serif; font-size: clamp(1rem, 2vw, 1.3rem); font-style: italic; color: var(--gris); margin-bottom: 1rem; }
+  .contacto-titulo { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 300; color: var(--crema); line-height: 0.95; margin-bottom: 1.5rem; }
+  .contacto-titulo em { color: var(--dorado); font-style: italic; }
+  .contacto-sub { font-size: 0.7rem; letter-spacing: 0.25em; color: var(--gris); margin-bottom: 4rem; text-transform: uppercase; }
+  .info-chips { display: flex; justify-content: center; gap: 2rem; margin-top: 4rem; flex-wrap: wrap; }
+  .chip { display: flex; align-items: center; gap: 0.5rem; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gris); }
+  .chip::before { content: ''; width: 4px; height: 4px; background: var(--dorado); border-radius: 50%; }
+
+  footer { border-top: 1px solid rgba(201,168,76,0.15); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300; letter-spacing: 0.4em; color: var(--dorado); text-transform: uppercase; }
+  .footer-copy { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gris); text-transform: uppercase; }
+  .footer-origen { font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; font-style: italic; color: var(--gris); }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero-nuevo { flex-direction: column; text-align: center; padding: 120px 1.5rem 3rem; }
+    .hero-imagen { order: -1; }
+    .section { padding: 5rem 1.5rem; }
+    .productos-grid { grid-template-columns: 1fr; }
+    .prep-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+    .contacto { padding: 6rem 1.5rem; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- Encabezado Semántico -->
-  <header id="main-header">
-    <nav aria-label="Navegación principal">
-      <a href="#" class="nav-logo">Punto Dorado</a>
-      <ul class="nav-links">
-        <li><a href="#productos">Productos</a></li>
-        <li><a href="#origen">Nuestro Origen</a></li>
-      </ul>
-    </nav>
-  </header>
+<nav id="nav">
+  <a href="#" class="nav-logo">Punto Dorado</a>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#preparacion">Preparación</a></li>
+    <li><a href="#contacto">Pedir ahora</a></li>
+  </ul>
+</nav>
 
-  <main>
-    <!-- Sección de Bienvenida (Hero) -->
-    <section class="hero" aria-label="Introducción">
-      <div class="hero-bg"></div>
-      <div class="hero-D" aria-hidden="true">P</div>
-      
-      <div class="hero-content">
-        <div class="hero-ornament animate-fade-up">Tradición & Alta Cocina</div>
-        <p class="hero-pretitle animate-fade-up">Tequeños de Autor</p>
-        <h1 class="hero-title animate-fade-up">Punto <span>Dorado</span></h1>
-        <p class="hero-subtitle animate-fade-up">El balance perfecto del sabor venezolano congelado.</p>
-        
-        <div class="hero-divider"></div>
-        
-        <a href="https://wa.me." 
-           class="btn-whatsapp animate-fade-up" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           aria-label="Realizar pedido mediante WhatsApp">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.488 1.449 5.412 1.451 5.428 0 9.845-4.393 9.848-9.799.002-2.618-1.011-5.08-2.856-6.928C17.158 2.03 14.7 1.01 12.01 1.01c-5.43 0-9.848 4.393-9.851 9.8-.001 1.93.503 3.818 1.456 5.416l-.995 3.637 3.733-.973zm13.067-7.38c-.29-.145-1.72-.848-1.987-.946-.267-.097-.461-.145-.655.145-.194.291-.749.946-.919 1.139-.17.194-.34.218-.63.073-.29-.145-1.226-.452-2.334-1.44-.863-.77-1.446-1.72-1.616-2.011-.17-.291-.018-.448.127-.592.13-.13.29-.34.436-.509.145-.17.194-.291.291-.485.097-.194.048-.364-.024-.509-.073-.145-.655-1.577-.898-2.16-.236-.57-.478-.49-.655-.499-.17-.008-.364-.01-.558-.01-.194 0-.509.073-.776.364-.267.291-1.019.995-1.019 2.428s1.042 2.816 1.187 3.011c.145.194 2.052 3.134 4.973 4.393.694.3 1.236.478 1.658.613.698.222 1.334.19 1.838.115.56-.083 1.72-.703 1.962-1.382.242-.678.242-1.261.17-1.382-.073-.122-.267-.194-.558-.34z"/>
-          </svg>
-          Pedir por WhatsApp
-        </a>
-      </div>
-    </section>
+<section class="hero-nuevo">
+  <div class="hero-texto">
+    <div class="hero-ornament">Origen Venezolano</div>
+    <h1 class="hero-title">PUNTO <span>Dorado</span></h1>
+    <p class="hero-subtitle">Tequeños artesanales: el sabor que te acompaña en cada momento.</p>
+    <a href="https://wa.me/541168780760?text=Hola!%20Quiero%20pedir%20tequeños" class="btn-principal">Pedir por WhatsApp</a>
+  </div>
+  <div class="hero-imagen">
+    <img src="Images/hero-tequenos.jfif" alt="Tequeños Punto Dorado">
+  </div>
+</section>
 
-    <!-- Cinta de Texto Corredizo -->
-    <div class="strip">
-      <div class="strip-inner" aria-hidden="true">
-        <div class="strip-item">100% Artesanal</div>
-        <div class="strip-item">Queso Premium</div>
-        <div class="strip-item">Listos para Freír u Hornear</div>
-        <div class="strip-item">Receta Original</div>
-        <div class="strip-item">100% Artesanal</div>
-        <div class="strip-item">Queso Premium</div>
-        <div class="strip-item">Listos para Freír u Hornear</div>
-        <div class="strip-item">Receta Original</div>
-      </div>
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item">Tequeños de queso venezolano</span>
+    <span class="strip-item">Congelados · Listos para freír</span>
+    <span class="strip-item">12 unidades por paquete</span>
+    <span class="strip-item">Envío y retiro disponible</span>
+    <span class="strip-item">Hecho en Argentina · Sabor venezolano</span>
+    <span class="strip-item">Sin descongelar · 3 a 4 minutos</span>
+    <span class="strip-item">Tequeños de queso venezolano</span>
+    <span class="strip-item">Congelados · Listos para freír</span>
+    <span class="strip-item">12 unidades por paquete</span>
+    <span class="strip-item">Envío y retiro disponible</span>
+  </div>
+</div>
+
+<section class="section" id="productos">
+  <div class="section-header reveal visible">
+    <div class="section-label">Nuestros productos</div>
+    <h2 class="section-title">Tequeños<br><em>artesanales</em></h2>
+  </div>
+  <div class="productos-grid" id="productos-grid">
+    <!-- Las cards se generan automáticamente desde Google Sheets -->
+  </div>
+</section>
+
+<section class="section preparacion" id="preparacion">
+  <div class="section-header reveal visible">
+    <div class="section-label">Fácil preparación</div>
+    <h2 class="section-title">Listos en<br><em>minutos</em></h2>
+  </div>
+  <div class="prep-grid">
+    <div class="prep-item"><span class="prep-icono">🍳</span><div class="prep-metodo">Freír</div><div class="prep-temp">170°C</div><div class="prep-tiempo">3 a 4 minutos</div></div>
+    <div class="prep-item"><span class="prep-icono">🌬️</span><div class="prep-metodo">Air Fryer</div><div class="prep-temp">180°C</div><div class="prep-tiempo">10 a 12 minutos</div></div>
+    <div class="prep-item"><span class="prep-icono">🔥</span><div class="prep-metodo">Horno</div><div class="prep-temp">200°C</div><div class="prep-tiempo">15 a 18 minutos</div></div>
+  </div>
+  <p style="text-align:center; margin-top: 3rem; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gris); font-style: italic;">✦ No es necesario descongelar antes de cocinar ✦</p>
+</section>
+
+<section class="contacto" id="contacto">
+  <div class="contacto-content">
+    <p class="contacto-pretexto reveal visible">¿Listo para el próximo encuentro?</p>
+    <h2 class="contacto-titulo reveal visible">Pedí tus<br><em>tequeños</em><br>ahora</h2>
+    <p class="contacto-sub reveal visible">Respondemos rápido · Envío o retiro a coordinar</p>
+    <a href="https://wa.me/541168780760?text=Hola!%20Vi%20la%20página%20y%20quiero%20hacer%20un%20pedido%20de%20tequeños%20Dorado%20🧀" target="_blank" class="btn-principal reveal visible">Escribinos por WhatsApp</a>
+    <div class="info-chips reveal visible">
+      <span class="chip">Efectivo</span>
+      <span class="chip">Transferencia</span>
+      <span class="chip">Mercado Pago</span>
+      <span class="chip">Envío a domicilio</span>
+      <span class="chip">Retiro disponible</span>
     </div>
+  </div>
+</section>
 
-    <!-- Rejilla Automatizada de Productos (4 Variedades) -->
-    <section id="productos" class="section" aria-labelledby="titulo-productos">
-      <div class="section-header">
-        <span class="section-label">Menú de Selección</span>
-        <h2 id="titulo-productos" class="section-title">Nuestras <em>Especialidades</em></h2>
-      </div>
-      
-      <div class="productos-grid">
-        
-        <!-- Producto 1: Tradicional -->
-        <article class="producto-card" data-stock-id="TEQ-TRADICIONAL">
-          <div class="producto-info">
-            <h3 class="producto-titulo">Tequeño Tradicional</h3>
-            <p class="producto-descripcion">El clásico e irresistible bastón de queso llanero premium envuelto en nuestra masa hojaldrada crujiente. El balance perfecto de sal y textura.</p>
-          </div>
-          <div class="producto-meta">
-            <span class="producto-precio" data-price-id="TEQ-TRADICIONAL">Cargando...</span>
-            <a href="https://wa.me" 
-               class="producto-cta" aria-label="Pedir Tequeño Tradicional por WhatsApp">Pedir</a>
-          </div>
-        </article>
+<footer>
+  <div class="footer-logo">Punto Dorado</div>
+  <div class="footer-copy">© 2026 Dorado · Todos los derechos reservados</div>
+  <div class="footer-origen">origen venezolano</div>
+</footer>
 
-        <!-- Producto 2: Doble Queso -->
-        <article class="producto-card" data-stock-id="TEQ-DOBLE">
-          <div class="producto-info">
-            <h3 class="producto-titulo">Doble Queso & Hojaldre</h3>
-            <p class="producto-descripcion">Para los amantes del queso. Una dosis doble del mejor queso fundente seleccionado en una masa fina y extra crocante.</p>
-          </div>
-          <div class="producto-meta">
-            <span class="producto-precio" data-price-id="TEQ-DOBLE">Cargando...</span>
-            <a href="https://wa.me" 
-               class="producto-cta" aria-label="Pedir Tequeño Doble Queso por WhatsApp">Pedir</a>
-          </div>
-        </article>
-
-        <!-- Producto 3: Jamón y Queso -->
-        <article class="producto-card" data-stock-id="TEQ-JAMON">
-          <div class="producto-info">
-            <h3 class="producto-titulo">Jamón & Queso llanero</h3>
-            <p class="producto-descripcion">Una combinación ahumada clásica y equilibrada. Jamón seleccionado de primera calidad que acompaña nuestro queso insignia.</p>
-          </div>
-          <div class="producto-meta">
-            <span class="producto-precio" data-price-id="TEQ-JAMON">Cargando...</span>
-            <a href="https://wa.me" 
-               class="producto-cta" aria-label="Pedir Tequeño de Jamón y Queso por WhatsApp">Pedir</a>
-          </div>
-        </article>
-
-        <!-- Producto 4: Chocolate -->
-        <article class="producto-card" data-stock-id="TEQ-CHOCO">
-          <div class="producto-info">
-            <h3 class="producto-titulo">Chocolate Tentación</h3>
-            <p class="producto-descripcion">Nuestra versión dulce. Un corazón de chocolate fundente semi-amargo que contrasta de forma increíble con la masa crocante.</p>
-          </div>
-          <div class="producto-meta">
-            <span class="producto-precio" data-price-id="TEQ-CHOCO">Cargando...</span>
-            <a href="https://wa.me" 
-               class="producto-cta" aria-label="Pedir Tequeño de Chocolate por WhatsApp">Pedir</a>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- Sección Nuestro Origen -->
-    <section id="origen" class="section">
-      <div class="origen-container">
-        <div class="section-header">
-          <span class="section-label">Nuestra Historia</span>
-          <h2 class="section-title">El Verdadero <em>Sabor</em></h2>
-        </div>
-        <p class="origen-text">
-          "Cada tequeño es elaborado respetando las recetas tradicionales de nuestra tierra, utilizando ingredientes seleccionados para garantizar una experiencia gourmet en cada bocado."
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Lógica de Scroll e interactividad -->
-  <script>
-    window.addEventListener('scroll', () => {
-      const header = document.getElementById('main-header');
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-  </script>
-  
-  <!-- Carga remota de Google Sheets -->
-  <script src="price.js"></script>
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+</script>
+<script src="precio.js"></script>
 </body>
 </html>
 
