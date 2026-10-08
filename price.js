@@ -1,4 +1,4 @@
-// precio.js
+// price.js
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOb8tl861tZb5oC5Yd6ssclDEBdxYASBGzmExv4DaKISeun9avcVZUerICvF5A09xiC92SNNOijfim/pub?output=csv";
 const NUMERO_WHATSAPP = "541168780760";
 
