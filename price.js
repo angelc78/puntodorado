@@ -39,16 +39,24 @@ function crearCard(producto, index) {
   const linkWhatsapp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
   const textoBoton = agotado ? 'Agotado · Pedí tu reserva' : 'Pedir por WhatsApp';
 
+  const imagenHtml = producto.imagen
+    ? `<img class="producto-imagen" src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">`
+    : `<div class="producto-imagen producto-imagen--fallback"><span>${producto.icono || '🧀'}</span></div>`;
+
   card.innerHTML = `
-    <div class="producto-num">${numero}</div>
-    <div class="producto-icon">${producto.icono || '🧀'}</div>
-    <h3 class="producto-nombre">${producto.nombre}</h3>
-    <p class="producto-desc">${producto.descripcion || ''}</p>
-    <div class="producto-precio">
-      <span class="precio-valor">${precioTexto}</span>
-      <span class="precio-detalle">${producto.detalle || ''}</span>
+    <div class="producto-imagen-wrap">
+      ${imagenHtml}
+      <div class="producto-num">${numero}</div>
     </div>
-    <a href="${linkWhatsapp}" class="producto-cta${agotado ? ' agotado' : ''}" target="_blank">${textoBoton}</a>
+    <div class="producto-info">
+      <h3 class="producto-nombre">${producto.nombre}</h3>
+      <p class="producto-desc">${producto.descripcion || ''}</p>
+      <div class="producto-precio">
+        <span class="precio-valor">${precioTexto}</span>
+        <span class="precio-detalle">${producto.detalle || ''}</span>
+      </div>
+      <a href="${linkWhatsapp}" class="producto-cta${agotado ? ' agotado' : ''}" target="_blank">${textoBoton}</a>
+    </div>
   `;
   return card;
 }
@@ -67,7 +75,7 @@ function parsearLineaCSV(linea) {
   return columnas;
 }
 
-// Espera columnas: id, nombre, descripcion, precio, stock, icono, detalle
+// Espera columnas: id, nombre, descripcion, precio, stock, icono, detalle, imagen
 function parsearCSV(csv) {
   const filas = csv.trim().split(/\r?\n/);
   const productos = [];
@@ -87,6 +95,7 @@ function parsearCSV(csv) {
       stock: !isNaN(stock) ? stock : undefined,
       icono: columnas[5]?.trim() || '',
       detalle: columnas[6]?.trim() || '',
+      imagen: columnas[7]?.trim() || '',
     });
   }
   return productos;
