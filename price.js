@@ -76,28 +76,38 @@ function parsearLineaCSV(linea) {
 }
 
 // Espera columnas: id, nombre, descripcion, precio, stock, icono, detalle, imagen
+// Lee las columnas por el nombre de encabezado (fila 1), no por posición
 function parsearCSV(csv) {
   const filas = csv.trim().split(/\r?\n/);
+  if (filas.length < 2) return [];
+  const encabezados = parsearLineaCSV(filas[0]).map(h => h.trim().toLowerCase());
   const productos = [];
+
   for (let i = 1; i < filas.length; i++) {
     const columnas = parsearLineaCSV(filas[i]);
-    const id = columnas[0]?.trim();
+    const fila = {};
+    encabezados.forEach((nombreCol, idx) => {
+      fila[nombreCol] = columnas[idx]?.trim() || '';
+    });
+
+    const id = fila['id'];
     if (!id) continue;
-    const precioTexto = columnas[3]?.trim();
-    const stockTexto = columnas[4]?.trim();
-    const precio = precioTexto ? Number(precioTexto.replace(/[^0-9]/g, '')) : NaN;
-    const stock = stockTexto ? Number(stockTexto.replace(/[^0-9]/g, '')) : NaN;
+
+    const precio = fila['precio'] ? Number(fila['precio'].replace(/[^0-9]/g, '')) : NaN;
+    const stock = fila['stock'] ? Number(fila['stock'].replace(/[^0-9]/g, '')) : NaN;
+
     productos.push({
       id,
-      nombre: columnas[1]?.trim() || '',
-      descripcion: columnas[2]?.trim() || '',
+      nombre: fila['nombre'] || '',
+      descripcion: fila['descripcion'] || '',
       precio: !isNaN(precio) ? precio : undefined,
       stock: !isNaN(stock) ? stock : undefined,
-      icono: columnas[5]?.trim() || '',
-      detalle: columnas[6]?.trim() || '',
-      imagen: columnas[7]?.trim() || '',
+      icono: fila['icono'] || '',
+      detalle: fila['detalle'] || '',
+      imagen: fila['imagen'] || '',
     });
   }
+
   return productos;
 }
 
